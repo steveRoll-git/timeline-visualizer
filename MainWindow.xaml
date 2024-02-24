@@ -14,9 +14,9 @@
         </Menu>
         <DockPanel>
             <StackPanel x:Name="DateStackPanel" Orientation="Horizontal" Height="24" HorizontalAlignment="Center" DockPanel.Dock="Top">
-                <DatePicker x:Name="DatePicker" Width="130"/>
-                <Button Content="˅" Width="{Binding Height, ElementName=DateStackPanel}" Height="{Binding Height, ElementName=DateStackPanel}" FontSize="16"/>
-                <Button Content="˄" Width="{Binding Height, ElementName=DateStackPanel}" Height="{Binding Height, ElementName=DateStackPanel}" FontSize="16"/>
+                <DatePicker x:Name="DatePicker" Width="130" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
+                <Button x:Name="PrevWeekButton" Content="˄" Width="{Binding Height, ElementName=DateStackPanel}" Height="{Binding Height, ElementName=DateStackPanel}" FontSize="16" Click="PrevWeekButton_Click"/>
+                <Button x:Name="NextWeekButton" Content="˅" Width="{Binding Height, ElementName=DateStackPanel}" Height="{Binding Height, ElementName=DateStackPanel}" FontSize="16" Click="NextWeekButton_Click"/>
             </StackPanel>
             <Grid x:Name="CalendarGrid">
                 <Grid.ColumnDefinitions>

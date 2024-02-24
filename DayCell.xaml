@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="TimelineVisualizer.DayCell"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TimelineVisualizer"
+             mc:Ignorable="d" 
+             d:DesignHeight="129.645" d:DesignWidth="194.05">
+    <UserControl.Background>
+        <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
+    </UserControl.Background>
+    <Grid>
+        <Label x:Name="DayLabel" Content="01" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+
+    </Grid>
+</UserControl>
