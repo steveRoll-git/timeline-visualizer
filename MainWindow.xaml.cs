@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace TimelineVisualizer
 {
@@ -19,9 +9,24 @@ namespace TimelineVisualizer
     /// </summary>
     public partial class MainWindow : Window
     {
+
         public MainWindow()
         {
             InitializeComponent();
+
+            DatePicker.SelectedDate = DateTime.Now;
+
+            var weekdays = CultureInfo.CurrentCulture.DateTimeFormat.AbbreviatedDayNames;
+            for(int i = 0; i < weekdays.Length; i++)
+            {
+                var label = new Label()
+                {
+                    Content = weekdays[i],
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                };
+                CalendarGrid.Children.Add(label);
+                label.SetValue(Grid.ColumnProperty, i);
+            }
         }
 
         private void LoadJSONMenuItem_Click(object sender, RoutedEventArgs e)

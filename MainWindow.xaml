@@ -5,13 +5,40 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TimelineVisualizer"
         mc:Ignorable="d"
-        Title="Timeline Visualizer" Height="450" Width="800">
-    <Grid>
-        <Menu x:Name="menu">
+        Title="Timeline Visualizer" Height="450" Width="562">
+    <DockPanel>
+        <Menu x:Name="menu" DockPanel.Dock="Top">
             <MenuItem Header="Data">
-                <MenuItem Header="Load JSON" Click="LoadJSONMenuItem_Click"/>
+                <MenuItem Header="Load JSON" Click="LoadJSONMenuItem_Click"/>  
             </MenuItem>
         </Menu>
+        <DockPanel>
+            <StackPanel x:Name="DateStackPanel" Orientation="Horizontal" Height="24" HorizontalAlignment="Center" DockPanel.Dock="Top">
+                <DatePicker x:Name="DatePicker" Width="130"/>
+                <Button Content="˅" Width="{Binding Height, ElementName=DateStackPanel}" Height="{Binding Height, ElementName=DateStackPanel}" FontSize="16"/>
+                <Button Content="˄" Width="{Binding Height, ElementName=DateStackPanel}" Height="{Binding Height, ElementName=DateStackPanel}" FontSize="16"/>
+            </StackPanel>
+            <Grid x:Name="CalendarGrid">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+            </Grid>
+        </DockPanel>
 
-    </Grid>
+    </DockPanel>
 </Window>
