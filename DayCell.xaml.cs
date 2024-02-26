@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace TimelineVisualizer
@@ -21,18 +11,36 @@ namespace TimelineVisualizer
     public partial class DayCell : UserControl
     {
         private DateTime date;
+
+        private static Color KnownColorToColor(System.Drawing.KnownColor color)
+        {
+            var argb = System.Drawing.Color.FromKnownColor(color).ToArgb();
+            return Color.FromArgb((byte)(argb >> 0x18), (byte)(argb >> 0x10), (byte)(argb >> 0x8), (byte)argb);
+        }
+
         public DayCell(DateTime date)
         {
             InitializeComponent();
 
             this.date = date;
-            if (date.Day == 1)
+            DayLabel.Content = $"{date.Day}/{date.Month}";
+
+            var sections = TimelineDB.GetPlaceDaySections(date);
+            foreach (var section in sections)
             {
-                DayLabel.Content = $"{date.Day}/{date.Month}";
-            }
-            else
-            {
-                DayLabel.Content = date.Day;
+                PlacesGrid.RowDefinitions.Add(new RowDefinition
+                {
+                    Height = new GridLength(section.EndTime - section.StartTime, GridUnitType.Star)
+                });
+                if (section.Place != null)
+                {
+                    var rect = new Rectangle
+                    {
+                        Fill = new SolidColorBrush(KnownColorToColor(section.Place.Color)),
+                    };
+                    PlacesGrid.Children.Add(rect);
+                    rect.SetValue(Grid.RowProperty, PlacesGrid.RowDefinitions.Count - 1);
+                }
             }
         }
     }

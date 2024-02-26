@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.IO;
 using System.Text.Json;
-using System.Windows.Media;
 
 namespace TimelineVisualizer
 {
@@ -35,6 +34,16 @@ namespace TimelineVisualizer
 
         [Column("longitude")]
         public double Longitude { get; set; }
+
+        [Column("radius")]
+        public double Radius { get; set; }
+    }
+
+    public class PlaceDaySection
+    {
+        public Place? Place;
+        public double StartTime;
+        public double EndTime;
     }
 
     /// <summary>
@@ -162,10 +171,106 @@ namespace TimelineVisualizer
             reader = new Utf8JsonReader(buffer, isFinalBlock: bytesRead == 0, reader.CurrentState);
         }
 
+        public static List<Place> GetPlaces(SQLiteConnection db)
+        {
+            return [.. db.Table<Place>()];
+        }
+
         public static List<Place> GetPlaces()
         {
+            var db = GetConnection();
+            return GetPlaces(db);
+        }
+
+        private static double ToRadians(double degree)
+        {
+            return Math.PI / 180 * degree;
+        }
+
+        private static double GetDistance(double lat1, double long1, double lat2, double long2)
+        {
+            // Convert the latitudes 
+            // and longitudes
+            // from degree to radians.
+            lat1 = ToRadians(lat1);
+            long1 = ToRadians(long1);
+            lat2 = ToRadians(lat2);
+            long2 = ToRadians(long2);
+
+            // Haversine Formula
+            double dlong = long2 - long1;
+            double dlat = lat2 - lat1;
+
+            double ans = Math.Pow(Math.Sin(dlat / 2), 2) +
+                                  Math.Cos(lat1) * Math.Cos(lat2) *
+                                  Math.Pow(Math.Sin(dlong / 2), 2);
+
+            ans = 2 * Math.Asin(Math.Sqrt(ans));
+
+            double R = 6371000;
+
+            ans *= R;
+
+            return ans;
+        }
+
+        private static Place? GetClosestPlace(this List<Place> places, double latitude, double longitude)
+        {
+            return places.FirstOrDefault(p =>
+            GetDistance(p.Latitude, p.Longitude, latitude, longitude) <= p.Radius);
+        }
+
+        private static double TimeToFactor(DateTime time)
+        {
+            return time.TimeOfDay.TotalSeconds / (24 * 60 * 60);
+        }
+
+        public static List<PlaceDaySection> GetPlaceDaySections(DateTime date)
+        {
             using var db = GetConnection();
-            return [.. db.Table<Place>()];
+            var places = GetPlaces(db);
+            var upperDate = date.AddDays(1);
+            var records = db.Table<TimelineRecord>().Where(r => r.Timestamp >= date && r.Timestamp < upperDate).ToList();
+            var sections = new List<PlaceDaySection>();
+            foreach (var record in records)
+            {
+                var place = places.GetClosestPlace(record.Latitude, record.Longitude);
+                if (sections.Count == 0)
+                {
+                    sections.Add(new PlaceDaySection { Place = place, StartTime = TimeToFactor(record.Timestamp) });
+                }
+                else
+                {
+                    sections.Last().EndTime = TimeToFactor(record.Timestamp);
+                    if (sections.Last().Place != place)
+                    {
+                        sections.Add(new PlaceDaySection
+                        {
+                            Place = place,
+                            StartTime = TimeToFactor(record.Timestamp)
+                        });
+                    }
+                }
+            }
+            if (sections.Count > 0)
+            {
+                var lastSection = sections.Last();
+                lastSection.EndTime = 1;
+            }
+            else
+            {
+                sections.Add(new PlaceDaySection
+                {
+                    Place = null,
+                    StartTime = 0,
+                    EndTime = 1
+                });
+            }
+            if (sections[0].StartTime > 1/24/60)
+            {
+                sections.Insert(0, new PlaceDaySection { StartTime = 0, EndTime = sections[0].StartTime });
+            }
+            return sections;
         }
     }
 }

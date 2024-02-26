@@ -4,13 +4,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TimelineVisualizer"
-             mc:Ignorable="d" 
-             d:DesignHeight="129.645" d:DesignWidth="194.05">
+             mc:Ignorable="d">
     <UserControl.Background>
         <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlColorKey}}"/>
     </UserControl.Background>
-    <Grid>
-        <Label x:Name="DayLabel" Content="01" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-
-    </Grid>
+    <Border BorderThickness="1,1,0,0" BorderBrush="Black">
+        <Grid>
+            <Grid x:Name="PlacesGrid">
+            </Grid>
+            <Label x:Name="DayLabel" Content="01" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        </Grid>
+    </Border>
 </UserControl>
