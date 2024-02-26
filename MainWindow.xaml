@@ -9,7 +9,8 @@
     <DockPanel>
         <Menu x:Name="menu" DockPanel.Dock="Top">
             <MenuItem Header="Data">
-                <MenuItem Header="Load JSON" Click="LoadJSONMenuItem_Click"/>  
+                <MenuItem Header="Edit Places" Click="EditPlacesMenuItem_Click"/>
+                <MenuItem Header="Load JSON" Click="LoadJSONMenuItem_Click"/>
             </MenuItem>
         </Menu>
         <DockPanel>

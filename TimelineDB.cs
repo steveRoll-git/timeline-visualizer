@@ -1,6 +1,8 @@
 ﻿using SQLite;
+using System.Drawing;
 using System.IO;
 using System.Text.Json;
+using System.Windows.Media;
 
 namespace TimelineVisualizer
 {
@@ -10,6 +12,23 @@ namespace TimelineVisualizer
         [PrimaryKey]
         [Column("timestamp")]
         public DateTime Timestamp { get; set; }
+
+        [Column("latitude")]
+        public double Latitude { get; set; }
+
+        [Column("longitude")]
+        public double Longitude { get; set; }
+    }
+
+    [Table("places")]
+    public class Place
+    {
+        [PrimaryKey]
+        [Column("name")]
+        public string Name { get; set; }
+
+        [Column("color")]
+        public KnownColor Color { get; set; }
 
         [Column("latitude")]
         public double Latitude { get; set; }
@@ -32,9 +51,10 @@ namespace TimelineVisualizer
         {
             using var db = GetConnection();
             db.CreateTable<TimelineRecord>();
+            db.CreateTable<Place>();
         }
 
-        private static SQLiteConnection GetConnection()
+        public static SQLiteConnection GetConnection()
         {
             return new SQLiteConnection(DBLocation);
         }
@@ -140,6 +160,12 @@ namespace TimelineVisualizer
                 bytesRead = stream.Read(buffer);
             }
             reader = new Utf8JsonReader(buffer, isFinalBlock: bytesRead == 0, reader.CurrentState);
+        }
+
+        public static List<Place> GetPlaces()
+        {
+            using var db = GetConnection();
+            return [.. db.Table<Place>()];
         }
     }
 }

@@ -1,0 +1,15 @@
+﻿<Window x:Class="TimelineVisualizer.PlacesEditor"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TimelineVisualizer"
+        mc:Ignorable="d"
+        Title="Edit Places" Height="298" Width="529" WindowStartupLocation="CenterOwner">
+    <Grid> 
+        <DataGrid x:Name="PlacesDataGrid" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="10,10,10,38"/>
+        <Button x:Name="SaveButton" Content="Save" Margin="0,0,10,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="50" IsDefault="True" Click="SaveButton_Click"/>
+        <Button x:Name="CancelButton" Content="Cancel" Margin="0,0,65,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="50" IsCancel="True"/>
+
+    </Grid>
+</Window>

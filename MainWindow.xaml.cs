@@ -116,5 +116,10 @@ namespace TimelineVisualizer
                 SetTopLeftDate(FirstDayOfWeek(new DateTime(date.Year, date.Month, 1)));
             }
         }
+
+        private void EditPlacesMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            new PlacesEditor() { Owner = this }.ShowDialog();
+        }
     }
 }
