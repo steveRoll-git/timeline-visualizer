@@ -14,7 +14,7 @@ namespace TimelineVisualizer
         /// </summary>
         public DateTime TopLeftDate;
 
-        private List<DayCell> dayCells = new();
+        private List<DayCell> dayCells = [];
 
         private bool datePickerFirstSet = false;
 
@@ -48,25 +48,30 @@ namespace TimelineVisualizer
             YearComboBox.ItemsSource = Enumerable.Range(minDate.Year, maxDate.Year - minDate.Year + 1);
             MonthComboBox.ItemsSource = dateTimeFormat.MonthNames.Where(m => m != "");
 
-            // Initially, the TopLeftDate will be set so that the entire current month will be visible.
-            SetTopLeftDate(FirstDayOfWeek(DateTime.Today));
-        }
-
-        private void GenerateDayCells()
-        {
-            foreach (var cell in dayCells)
-            {
-                CalendarGrid.Children.Remove(cell);
-            }
             for (int week = 0; week < 6; week++)
             {
                 for (int weekday = 0; weekday < 7; weekday++)
                 {
-                    var cell = new DayCell(TopLeftDate.AddDays(week * 7 + weekday), week == 0 && weekday == 0);
+                    var cell = new DayCell();
                     CalendarGrid.Children.Add(cell);
                     cell.SetValue(Grid.RowProperty, week + 1);
                     cell.SetValue(Grid.ColumnProperty, weekday);
                     dayCells.Add(cell);
+                }
+            }
+
+            // Initially, the TopLeftDate will be set so that the entire current month will be visible.
+            SetTopLeftDate(FirstDayOfWeek(DateTime.Today));
+        }
+
+        private void UpdateDayCells()
+        {
+            for (int week = 0; week < 6; week++)
+            {
+                for (int weekday = 0; weekday < 7; weekday++)
+                {
+                    var cell = dayCells[week * 7 + weekday];
+                    cell.SetDate(TopLeftDate.AddDays(week * 7 + weekday), week == 0 && weekday == 0);
                 }
             }
         }
@@ -79,7 +84,7 @@ namespace TimelineVisualizer
             }
             TopLeftDate = date;
             DateLabel.Content = date.ToShortDateString();
-            GenerateDayCells();
+            UpdateDayCells();
         }
 
         private void LoadJSONMenuItem_Click(object sender, RoutedEventArgs e)
