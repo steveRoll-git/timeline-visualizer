@@ -18,10 +18,11 @@ namespace TimelineVisualizer
 
         private bool datePickerFirstSet = false;
 
+        private DateTime DatePickerDate => new((int)YearComboBox.SelectedItem, MonthComboBox.SelectedIndex + 1, DayComboBox.SelectedIndex + 1);
+
         private static DateTime FirstDayOfWeek(DateTime date)
         {
-            var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
-            return firstDayOfMonth.AddDays(-((7 + (firstDayOfMonth.DayOfWeek - CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek)) % 7));
+            return date.AddDays(-((7 + (date.DayOfWeek - CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek)) % 7));
         }
 
         public MainWindow()
@@ -61,7 +62,7 @@ namespace TimelineVisualizer
             }
 
             // Initially, the TopLeftDate will be set so that the entire current month will be visible.
-            SetTopLeftDate(FirstDayOfWeek(DateTime.Today));
+            SetTopLeftDate(FirstDayOfWeek(new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1)));
         }
 
         private void UpdateDayCells()
@@ -85,6 +86,10 @@ namespace TimelineVisualizer
             TopLeftDate = date;
             DateLabel.Content = date.ToShortDateString();
             UpdateDayCells();
+            if (datePickerFirstSet && Math.Abs((DatePickerDate - date).Days) >= 21)
+            {
+                datePickerFirstSet = false;
+            }
         }
 
         private void LoadJSONMenuItem_Click(object sender, RoutedEventArgs e)
@@ -144,14 +149,14 @@ namespace TimelineVisualizer
 
         private void SetDateButton_Click(object sender, RoutedEventArgs e)
         {
-            SetTopLeftDate(FirstDayOfWeek(new DateTime((int)YearComboBox.SelectedItem, MonthComboBox.SelectedIndex + 1, DayComboBox.SelectedIndex + 1)));
+            SetTopLeftDate(FirstDayOfWeek(DatePickerDate));
             PreviewDatePanel.Visibility = Visibility.Visible;
             DatePicker.Visibility = Visibility.Collapsed;
         }
 
         private void TodayButton_Click(object sender, RoutedEventArgs e)
         {
-            SetTopLeftDate(FirstDayOfWeek(DateTime.Today));
+            SetTopLeftDate(FirstDayOfWeek(new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1)));
         }
 
         private void CalendarGrid_MouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
