@@ -148,5 +148,10 @@ namespace TimelineVisualizer
         {
             SetTopLeftDate(FirstDayOfWeek(DateTime.Today));
         }
+
+        private void CalendarGrid_MouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
+        {
+            SetTopLeftDate(TopLeftDate.AddDays(7 * -Math.Sign(e.Delta)));
+        }
     }
 }

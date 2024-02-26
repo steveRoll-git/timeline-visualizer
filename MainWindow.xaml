@@ -29,7 +29,7 @@
                     <Button x:Name="NextWeekButton" Content="˅" Width="{Binding Height, ElementName=DateStackPanel}" FontSize="16" Click="NextWeekButton_Click"/>
                 </StackPanel>
             </StackPanel>
-            <Grid x:Name="CalendarGrid">
+            <Grid x:Name="CalendarGrid" MouseWheel="CalendarGrid_MouseWheel">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*" />
                     <ColumnDefinition Width="1*" />
