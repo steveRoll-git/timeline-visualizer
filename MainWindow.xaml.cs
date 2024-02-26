@@ -143,5 +143,10 @@ namespace TimelineVisualizer
             PreviewDatePanel.Visibility = Visibility.Visible;
             DatePicker.Visibility = Visibility.Collapsed;
         }
+
+        private void TodayButton_Click(object sender, RoutedEventArgs e)
+        {
+            SetTopLeftDate(FirstDayOfWeek(DateTime.Today));
+        }
     }
 }
