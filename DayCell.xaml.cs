@@ -18,12 +18,14 @@ namespace TimelineVisualizer
             return Color.FromArgb((byte)(argb >> 0x18), (byte)(argb >> 0x10), (byte)(argb >> 0x8), (byte)argb);
         }
 
-        public DayCell(DateTime date)
+        public DayCell(DateTime date, bool showYear = false)
         {
             InitializeComponent();
 
+            showYear = showYear || (date.Month == 1 && date.Day == 1);
+
             this.date = date;
-            DayLabel.Content = $"{date.Day}/{date.Month}";
+            DayLabel.Content = $"{date.Day}/{date.Month}{(showYear ? "/" + date.Year : "")}";
 
             var sections = TimelineDB.GetPlaceDaySections(date);
             foreach (var section in sections)

@@ -58,7 +58,7 @@ namespace TimelineVisualizer
             {
                 for (int weekday = 0; weekday < 7; weekday++)
                 {
-                    var cell = new DayCell(TopLeftDate.AddDays(week * 7 + weekday));
+                    var cell = new DayCell(TopLeftDate.AddDays(week * 7 + weekday), week == 0 && weekday == 0);
                     CalendarGrid.Children.Add(cell);
                     cell.SetValue(Grid.RowProperty, week + 1);
                     cell.SetValue(Grid.ColumnProperty, weekday);
