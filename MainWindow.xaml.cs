@@ -16,6 +16,8 @@ namespace TimelineVisualizer
 
         private List<DayCell> dayCells = new();
 
+        private bool datePickerFirstSet = false;
+
         private static DateTime FirstDayOfWeek(DateTime date)
         {
             var firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
@@ -27,8 +29,6 @@ namespace TimelineVisualizer
             var dateTimeFormat = CultureInfo.CurrentCulture.DateTimeFormat;
 
             InitializeComponent();
-
-            DatePicker.SelectedDate = DateTime.Now;
 
             var weekdays = dateTimeFormat.AbbreviatedDayNames;
             for (int i = 0; i < weekdays.Length; i++)
@@ -42,10 +42,14 @@ namespace TimelineVisualizer
                 label.SetValue(Grid.ColumnProperty, i);
             }
 
-            // Initially, the TopLeftDate will be set so that the entire current month will be visible.
-            TopLeftDate = FirstDayOfWeek(DateTime.Today);
+            using var db = TimelineDB.GetConnection();
+            var minDate = new DateTime(db.QueryScalars<long>("SELECT MIN(timestamp) from timeline;")[0]);
+            var maxDate = new DateTime(db.QueryScalars<long>("SELECT MAX(timestamp) from timeline;")[0]);
+            YearComboBox.ItemsSource = Enumerable.Range(minDate.Year, maxDate.Year - minDate.Year + 1);
+            MonthComboBox.ItemsSource = dateTimeFormat.MonthNames.Where(m => m != "");
 
-            GenerateDayCells();
+            // Initially, the TopLeftDate will be set so that the entire current month will be visible.
+            SetTopLeftDate(FirstDayOfWeek(DateTime.Today));
         }
 
         private void GenerateDayCells()
@@ -74,6 +78,7 @@ namespace TimelineVisualizer
                 return;
             }
             TopLeftDate = date;
+            DateLabel.Content = date.ToShortDateString();
             GenerateDayCells();
         }
 
@@ -109,17 +114,34 @@ namespace TimelineVisualizer
             SetTopLeftDate(TopLeftDate.AddDays(7));
         }
 
-        private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (DatePicker.SelectedDate is DateTime date)
-            {
-                SetTopLeftDate(FirstDayOfWeek(new DateTime(date.Year, date.Month, 1)));
-            }
-        }
-
         private void EditPlacesMenuItem_Click(object sender, RoutedEventArgs e)
         {
             new PlacesEditor() { Owner = this }.ShowDialog();
+        }
+
+        private void DateLabel_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            PreviewDatePanel.Visibility = Visibility.Collapsed;
+            DatePicker.Visibility = Visibility.Visible;
+            if (!datePickerFirstSet)
+            {
+                datePickerFirstSet = true;
+                YearComboBox.SelectedItem = TopLeftDate.Year;
+                MonthComboBox.SelectedIndex = TopLeftDate.Month - 1;
+                DayComboBox.SelectedIndex = TopLeftDate.Day - 1;
+            }
+        }
+
+        private void MonthComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DayComboBox.ItemsSource = Enumerable.Range(1, DateTime.DaysInMonth((int)YearComboBox.SelectedItem, MonthComboBox.SelectedIndex + 1));
+        }
+
+        private void SetDateButton_Click(object sender, RoutedEventArgs e)
+        {
+            SetTopLeftDate(FirstDayOfWeek(new DateTime((int)YearComboBox.SelectedItem, MonthComboBox.SelectedIndex + 1, DayComboBox.SelectedIndex + 1)));
+            PreviewDatePanel.Visibility = Visibility.Visible;
+            DatePicker.Visibility = Visibility.Collapsed;
         }
     }
 }

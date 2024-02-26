@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TimelineVisualizer"
         mc:Ignorable="d"
-        Title="Timeline Visualizer" Height="450" Width="562">
+        Title="Timeline Visualizer" Height="710" Width="612">
     <DockPanel>
         <Menu x:Name="menu" DockPanel.Dock="Top">
             <MenuItem Header="Data">
@@ -14,10 +14,19 @@
             </MenuItem>
         </Menu>
         <DockPanel>
-            <StackPanel x:Name="DateStackPanel" Orientation="Horizontal" Height="24" HorizontalAlignment="Center" DockPanel.Dock="Top">
-                <DatePicker x:Name="DatePicker" Width="130" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
-                <Button x:Name="PrevWeekButton" Content="˄" Width="{Binding Height, ElementName=DateStackPanel}" Height="{Binding Height, ElementName=DateStackPanel}" FontSize="16" Click="PrevWeekButton_Click"/>
-                <Button x:Name="NextWeekButton" Content="˅" Width="{Binding Height, ElementName=DateStackPanel}" Height="{Binding Height, ElementName=DateStackPanel}" FontSize="16" Click="NextWeekButton_Click"/>
+            <StackPanel x:Name="DateStackPanel" Orientation="Horizontal" Height="28" HorizontalAlignment="Center" DockPanel.Dock="Top">
+                <StackPanel x:Name="DatePicker" Orientation="Horizontal" Visibility="Collapsed" d:Visibility="Visible">
+                    <ComboBox x:Name="YearComboBox" VerticalContentAlignment="Center"/>
+                    <ComboBox x:Name="MonthComboBox" VerticalContentAlignment="Center" SelectionChanged="MonthComboBox_SelectionChanged" Width="89"/>
+                    <ComboBox x:Name="DayComboBox" VerticalContentAlignment="Center"/>
+                    <Button x:Name="SetDateButton" Content="✔" Width="{Binding Height, ElementName=DateStackPanel}" Background="#FF62FF65" Click="SetDateButton_Click"/>
+                </StackPanel>
+                <StackPanel x:Name="PreviewDatePanel" Orientation="Horizontal">
+                    <Label x:Name="DateLabel" d:Content="2024 February 26" HorizontalContentAlignment="Center" Width="130" MouseLeftButtonUp="DateLabel_Click"/>
+                    <!--<DatePicker x:Name="DatePicker" Width="130" SelectedDateChanged="DatePicker_SelectedDateChanged"/>-->
+                    <Button x:Name="PrevWeekButton" Content="˄" Width="{Binding Height, ElementName=DateStackPanel}" FontSize="16" Click="PrevWeekButton_Click"/>
+                    <Button x:Name="NextWeekButton" Content="˅" Width="{Binding Height, ElementName=DateStackPanel}" FontSize="16" Click="NextWeekButton_Click"/>
+                </StackPanel>
             </StackPanel>
             <Grid x:Name="CalendarGrid">
                 <Grid.ColumnDefinitions>
