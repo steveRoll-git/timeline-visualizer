@@ -19,14 +19,32 @@
                     <ComboBox x:Name="YearComboBox" VerticalContentAlignment="Center"/>
                     <ComboBox x:Name="MonthComboBox" VerticalContentAlignment="Center" SelectionChanged="MonthComboBox_SelectionChanged" Width="89"/>
                     <ComboBox x:Name="DayComboBox" VerticalContentAlignment="Center"/>
-                    <Button x:Name="SetDateButton" Content="✔" Width="{Binding Height, ElementName=DateStackPanel}" Background="#FF62FF65" Click="SetDateButton_Click"/>
+                    <Button x:Name="SetDateButton" Content="✔" Width="{Binding Height, ElementName=DateStackPanel}" Background="#FF62FF65" Click="SetDateButton_Click">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="0,5,5,0"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
                 </StackPanel>
                 <StackPanel x:Name="PreviewDatePanel" Orientation="Horizontal">
-                    <Button x:Name="TodayButton" Content="📆" Width="{Binding Height, ElementName=DateStackPanel}" FontSize="16" Click="TodayButton_Click"/>
-                    <Label x:Name="DateLabel" d:Content="2024 February 26" HorizontalContentAlignment="Center" Width="130" MouseLeftButtonUp="DateLabel_Click"/>
+                    <Button x:Name="TodayButton" Content="📆" Width="{Binding Height, ElementName=DateStackPanel}" FontSize="16" Click="TodayButton_Click">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="5,0,0,5"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+                    <Label x:Name="DateLabel" d:Content="2024 February 26" HorizontalContentAlignment="Center" Width="130" MouseLeftButtonUp="DateLabel_Click" Background="#FFDDDDDD" BorderBrush="#FF707070" BorderThickness="0,1,0,1"/>
                     <!--<DatePicker x:Name="DatePicker" Width="130" SelectedDateChanged="DatePicker_SelectedDateChanged"/>-->
                     <Button x:Name="PrevWeekButton" Content="˄" Width="{Binding Height, ElementName=DateStackPanel}" FontSize="16" Click="PrevWeekButton_Click"/>
-                    <Button x:Name="NextWeekButton" Content="˅" Width="{Binding Height, ElementName=DateStackPanel}" FontSize="16" Click="NextWeekButton_Click"/>
+                    <Button x:Name="NextWeekButton" Content="˅" Width="{Binding Height, ElementName=DateStackPanel}" FontSize="16" Click="NextWeekButton_Click" BorderThickness="0,1,1,1">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="0,5,5,0"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
                 </StackPanel>
             </StackPanel>
             <Grid x:Name="CalendarGrid" MouseWheel="CalendarGrid_MouseWheel">
