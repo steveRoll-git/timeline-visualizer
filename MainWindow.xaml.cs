@@ -18,7 +18,7 @@ namespace TimelineVisualizer
 
         private bool datePickerFirstSet = false;
 
-        private DateTime DatePickerDate => new((int)YearComboBox.SelectedItem, MonthComboBox.SelectedIndex + 1, DayComboBox.SelectedIndex + 1);
+        private DateTime DatePickerDate => new(int.Parse(YearComboBox.Text), MonthComboBox.SelectedIndex + 1, DayComboBox.SelectedIndex + 1);
 
         private static DateTime FirstDayOfWeek(DateTime date)
         {
@@ -136,7 +136,7 @@ namespace TimelineVisualizer
             if (!datePickerFirstSet)
             {
                 datePickerFirstSet = true;
-                YearComboBox.SelectedItem = TopLeftDate.Year;
+                YearComboBox.Text = TopLeftDate.Year.ToString();
                 MonthComboBox.SelectedIndex = TopLeftDate.Month - 1;
                 DayComboBox.SelectedIndex = TopLeftDate.Day - 1;
             }
@@ -144,7 +144,7 @@ namespace TimelineVisualizer
 
         private void MonthComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            DayComboBox.ItemsSource = Enumerable.Range(1, DateTime.DaysInMonth((int)YearComboBox.SelectedItem, MonthComboBox.SelectedIndex + 1));
+            DayComboBox.ItemsSource = Enumerable.Range(1, DateTime.DaysInMonth(int.Parse(YearComboBox.Text), MonthComboBox.SelectedIndex + 1));
         }
 
         private void SetDateButton_Click(object sender, RoutedEventArgs e)

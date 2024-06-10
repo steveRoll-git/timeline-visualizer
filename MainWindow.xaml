@@ -16,7 +16,7 @@
         <DockPanel>
             <StackPanel x:Name="DateStackPanel" Orientation="Horizontal" Height="28" HorizontalAlignment="Center" DockPanel.Dock="Top">
                 <StackPanel x:Name="DatePicker" Orientation="Horizontal" Visibility="Collapsed" d:Visibility="Visible">
-                    <ComboBox x:Name="YearComboBox" VerticalContentAlignment="Center"/>
+                    <ComboBox x:Name="YearComboBox" VerticalContentAlignment="Center" IsEditable="True"/>
                     <ComboBox x:Name="MonthComboBox" VerticalContentAlignment="Center" SelectionChanged="MonthComboBox_SelectionChanged" Width="89"/>
                     <ComboBox x:Name="DayComboBox" VerticalContentAlignment="Center"/>
                     <Button x:Name="SetDateButton" Content="✔" Width="{Binding Height, ElementName=DateStackPanel}" Background="#FF62FF65" Click="SetDateButton_Click">
